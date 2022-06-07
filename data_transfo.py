@@ -19,7 +19,42 @@ def create_x_y(df):
     
     #fit the X's
     max_abs_scaler = preprocessing.MaxAbsScaler()
-    x_fitted = max_abs_scaler.fit_transform(x)
+    x_fitted = max_abs_scaler.fit_transform(x)    
+    
+    return x_fitted, y_transformed
+
+
+def get_train_test_cnn(df_train, df_test):
+    # on merge les dataframe en vue d'homogénéiser la normalisation des données
+    lg_train = df_train.shape[0]
+
+    df_test = df_test.reset_index(drop=True)
+    train_test_df = pd.concat([df_train, df_test], axis=0)
+    
+    # on fit les x et y sur l'ensemble du dataframe
+    x_fitted, y_fitted = create_x_y(train_test_df)
+    
+    print(x_fitted.shape)
+    x_fitted = x_fitted.reshape(x_fitted.shape[0],x_fitted.shape[1],x_fitted.shape[2],1)
+    
+    x_train, y_train = x_fitted[:lg_train], y_fitted[:lg_train]
+    x_test, y_test = x_fitted[lg_train:], y_fitted[lg_train:]
+    
+    return x_train, y_train, x_test, y_test
+
+
+
+def get_train_test_rnn(df_train, df_test):
+    
+    # on merge les dataframe en vue d'homogénéiser la normalisation des données
+    lg_train = df_train.shape[0]
+
+    df_test = df_test.reset_index(drop=True)
+    train_test_df = pd.concat([df_train, df_test], axis=0)
+    
+    # on fit les x et y sur l'ensemble du dataframe
+    x_fitted, y_fitted = create_x_y(train_test_df)
+    
     
     #reshape the inner arrays of x_fitted
     print(x_fitted.shape)
@@ -30,23 +65,10 @@ def create_x_y(df):
     print(x_fitted.shape)
     
     
-    return x_fitted, y_transformed
-
-
-def get_train_test_fitted(df_train, df_test):
-    # on merge les dataframe en vue d'homogénéiser la normalisation des données
-    lg_train = df_train.shape[0]
-
-    df_test = df_test.reset_index(drop=True)
-    train_test_df = pd.concat([df_train, df_test], axis=0)
-    
-    # on fit les x et y sur l'ensemble du dataframe
-    x_fitted, y_fitted = create_x_y(train_test_df)
     
     x_train, y_train = x_fitted[:lg_train], y_fitted[:lg_train]
     x_test, y_test = x_fitted[lg_train:], y_fitted[lg_train:]
     
-    
-    
     return x_train, y_train, x_test, y_test
+    
     
