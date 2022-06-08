@@ -35,7 +35,7 @@ def get_train_test_cnn(df_train, df_test):
     x_fitted, y_fitted = create_x_y(train_test_df)
     
     print(x_fitted.shape)
-    x_fitted = x_fitted.reshape(x_fitted.shape[0],x_fitted.shape[1],x_fitted.shape[2],1)
+    x_fitted = x_fitted.reshape(x_fitted.shape[0],x_fitted.shape[1],1)
     
     x_train, y_train = x_fitted[:lg_train], y_fitted[:lg_train]
     x_test, y_test = x_fitted[lg_train:], y_fitted[lg_train:]

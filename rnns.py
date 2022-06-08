@@ -1,10 +1,8 @@
 from pickletools import optimize
-import tensorflow as tf
+
 from tensorflow import keras
 
-def display_model(model):
-    model.summary()
-    return tf.keras.utils.plot_model(model, show_shapes=True)
+
     
     
 
@@ -32,10 +30,6 @@ def create_complex_rnn(x_train, y_train, drop=0, rec_drop=0):
     
     return model
 
-
-def compile_model(model, mode='lstm'):
-    if mode == 'lstm':
-        model.compile(optimizer='adam', loss='mean_squared_error', metrics=["accuracy"])
 
 
 
