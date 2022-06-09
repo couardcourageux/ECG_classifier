@@ -10,14 +10,16 @@ def create_x_y(df):
     # split the x's and y's
     x, y = df.iloc[:, 1:].values, df.iloc[:, 0].values
     
-    #encode and fit the labels
+    # Make the labels an integer repartition
     encoder = preprocessing.LabelEncoder()
     y_transformed = encoder.fit_transform(y)
+    
+    # Make the labels a binary representation of their int
     encoder = preprocessing.OneHotEncoder()
     y_transformed = encoder.fit_transform(y_transformed.reshape(-1, 1))
     y_transformed = y_transformed.toarray()
     
-    #fit the X's
+    #Scale the X's
     max_abs_scaler = preprocessing.MaxAbsScaler()
     x_fitted = max_abs_scaler.fit_transform(x)    
     
@@ -34,7 +36,7 @@ def get_train_test_cnn(df_train, df_test):
     # on fit les x et y sur l'ensemble du dataframe
     x_fitted, y_fitted = create_x_y(train_test_df)
     
-    print(x_fitted.shape)
+    # dans le cas du cnn 1d, il suffit de rajouter une dimension pour que le réseau comprenne la donnée
     x_fitted = x_fitted.reshape(x_fitted.shape[0],x_fitted.shape[1],1)
     
     x_train, y_train = x_fitted[:lg_train], y_fitted[:lg_train]
@@ -55,16 +57,12 @@ def get_train_test_rnn(df_train, df_test):
     # on fit les x et y sur l'ensemble du dataframe
     x_fitted, y_fitted = create_x_y(train_test_df)
     
-    
     #reshape the inner arrays of x_fitted
-    print(x_fitted.shape)
+    # chaque série temporelle est une suite de séquences de 1, les unes à la suite des autres
     x_as_list = x_fitted.tolist()
     x_to_fitted = [np.reshape(x, (-1, 1)) for x in x_as_list]
     
-    x_fitted = np.array(x_to_fitted)
-    print(x_fitted.shape)
-    
-    
+    x_fitted = np.array(x_to_fitted) 
     
     x_train, y_train = x_fitted[:lg_train], y_fitted[:lg_train]
     x_test, y_test = x_fitted[lg_train:], y_fitted[lg_train:]
